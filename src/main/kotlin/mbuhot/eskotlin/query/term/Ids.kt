@@ -20,10 +20,12 @@ class IdsData(
 }
 
 
-fun ids(init: IdsData.() -> Unit): IdsQueryBuilder {
-    val params = IdsData().apply(init)
-    return IdsQueryBuilder(*params.types.toTypedArray()).apply {
-        initQuery(params)
-        addIds(*params.values.toTypedArray())
-    }
+fun ids(shouldApply: Boolean = true, init: IdsData.() -> Unit): IdsQueryBuilder? {
+    if (shouldApply) {
+        val params = IdsData().apply(init)
+        return IdsQueryBuilder(*params.types.toTypedArray()).apply {
+            initQuery(params)
+            addIds(*params.values.toTypedArray())
+        }
+    } else return null
 }

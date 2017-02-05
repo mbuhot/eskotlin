@@ -18,16 +18,18 @@ data class HasChildData(
         var max_children: Int = HasChildQueryBuilder.DEFAULT_MAX_CHILDREN,
         var inner_hits: InnerHitBuilder? = null) {
 
-    fun query(f: () -> QueryBuilder) {
-        query = f()
+    fun query(shouldApply: Boolean = true, f: () -> QueryBuilder?) {
+        if (shouldApply) f()?.let { query = it }
     }
 }
 
-fun has_child(init: HasChildData.() -> Unit): HasChildQueryBuilder {
-    val params = HasChildData().apply(init)
-    return HasChildQueryBuilder(params.type, params.query, params.score_mode).apply {
-        params.boost?.let { boost(it) }
-        minMaxChildren(params.min_children, params.max_children)
-        params.inner_hits?.let { innerHit(it) }
-    }
+fun has_child(shouldApply: Boolean = true, init: HasChildData.() -> Unit): HasChildQueryBuilder? {
+    if (shouldApply) {
+        val params = HasChildData().apply(init)
+        return HasChildQueryBuilder(params.type, params.query, params.score_mode).apply {
+            params.boost?.let { boost(it) }
+            minMaxChildren(params.min_children, params.max_children)
+            params.inner_hits?.let { innerHit(it) }
+        }
+    } else return null
 }

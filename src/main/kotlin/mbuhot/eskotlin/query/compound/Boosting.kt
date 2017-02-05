@@ -12,18 +12,20 @@ data class BoostingData(
     var negative: QueryBuilder? = null,
     var negative_boost: Float? = null) {
 
-    fun positive(f: () -> QueryBuilder) {
-        positive = f()
+    fun positive(shouldApply: Boolean = true, f: () -> QueryBuilder?) {
+        if (shouldApply) f()?.let { positive = it }
     }
 
-    fun negative(f: () -> QueryBuilder) {
-        negative = f()
+    fun negative(shouldApply: Boolean = true, f: () -> QueryBuilder?) {
+        if (shouldApply) f()?.let { negative = it }
     }
 }
 
-fun boosting(init: BoostingData.() -> Unit): BoostingQueryBuilder {
-    val params = BoostingData().apply(init)
-    return BoostingQueryBuilder(params.positive, params.negative).apply {
-        params.negative_boost?.let { negativeBoost(it) }
-    }
+fun boosting(shouldApply: Boolean = true, init: BoostingData.() -> Unit): BoostingQueryBuilder? {
+    if (shouldApply) {
+        val params = BoostingData().apply(init)
+        return BoostingQueryBuilder(params.positive, params.negative).apply {
+            params.negative_boost?.let { negativeBoost(it) }
+        }
+    } else return null
 }

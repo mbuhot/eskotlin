@@ -4,6 +4,7 @@
 
 package mbuhot.eskotlin.query.fulltext
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import org.junit.Test
 
@@ -34,6 +35,15 @@ class MatchPhrasePrefixTest {
                 }
             }
             """
+    }
+
+    @Test
+    fun `test match_phrase_prefix disabled`() {
+        val query = match_phrase_prefix(false) {
+            "message" to "this is a test"
+        }
+
+        query.should_be_null()
     }
 
     @Test

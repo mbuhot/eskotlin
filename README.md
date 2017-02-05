@@ -119,6 +119,35 @@ val query = bool {
 
 ```
 
+These queries can also be conditional, introducing the ability for basic dynamic queries:
+```kotlin
+val query = bool {
+    must {
+        term { "user" to "kimchy" }
+    }
+    filter(isTech()) {
+        term { "tag" to "tech" }
+    }
+    filter(!isTech()) {
+        match_all { }
+    }
+    must_not {
+        range {
+            "age" to {
+                from = 10
+                to = 20
+            }
+        }
+    }
+    should = listOf(
+        term(isAmazing()) { "tag" to "wow" },
+        term { "tag" to "elasticsearch" })
+    minimum_should_match = 1
+    boost = 1.0f
+}
+
+```
+
 ## Function Score Query
 
 JSON:
