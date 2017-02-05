@@ -15,15 +15,17 @@ data class HasParentData(
         var boost: Float? = null,
         var inner_hits: InnerHitBuilder? = null) {
 
-    fun query(f: () -> QueryBuilder) {
-        query = f()
+    fun query(shouldApply: Boolean = true, f: () -> QueryBuilder?) {
+        if (shouldApply) f()?.let { query = it }
     }
 }
 
-fun has_parent(init: HasParentData.() -> Unit): HasParentQueryBuilder {
-    val params = HasParentData().apply(init)
-    return HasParentQueryBuilder(params.parent_type, params.query, params.score).apply {
-        params.boost?.let { boost(it) }
-        params.inner_hits?.let { innerHit(it) }
-    }
+fun has_parent(shouldApply: Boolean = true, init: HasParentData.() -> Unit): HasParentQueryBuilder? {
+    if (shouldApply) {
+        val params = HasParentData().apply(init)
+        return HasParentQueryBuilder(params.parent_type, params.query, params.score).apply {
+            params.boost?.let { boost(it) }
+            params.inner_hits?.let { innerHit(it) }
+        }
+    } else return null
 }

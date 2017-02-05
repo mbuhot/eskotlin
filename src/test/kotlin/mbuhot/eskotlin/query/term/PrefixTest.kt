@@ -4,6 +4,7 @@
 
 package mbuhot.eskotlin.query.term
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import org.junit.Test
 
@@ -28,6 +29,15 @@ class PrefixTest {
                 }
             }
         }"""
+    }
+
+    @Test
+    fun `test prefix disabled`() {
+        val query = prefix(false) {
+            "user" to "ki"
+        }
+
+        query.should_be_null()
     }
 
     @Test

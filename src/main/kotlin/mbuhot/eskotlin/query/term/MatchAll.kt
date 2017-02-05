@@ -10,7 +10,9 @@ import org.elasticsearch.index.query.MatchAllQueryBuilder
 /**
  * match_all
  */
-fun match_all(init: MatchAllQueryBuilder.() -> Unit) = MatchAllQueryBuilder().apply(init)
+fun match_all(shouldApply: Boolean = true, init: MatchAllQueryBuilder.() -> Unit) =
+        if (shouldApply) MatchAllQueryBuilder().apply(init)
+        else null
 
 var MatchAllQueryBuilder.boost: Float
     get() = error("write-only property")

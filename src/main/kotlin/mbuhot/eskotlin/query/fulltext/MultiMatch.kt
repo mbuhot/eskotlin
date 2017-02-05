@@ -27,22 +27,24 @@ data class MultiMatchData(
         var cutoff_frequency: Float? = null,
         var zero_terms_query: MatchQuery.ZeroTermsQuery? = null)
 
-fun multi_match(init: MultiMatchData.() -> Unit): MultiMatchQueryBuilder {
-    val params = MultiMatchData().apply(init)
-    return MultiMatchQueryBuilder(params.query, *params.fields!!.toTypedArray()).apply {
-        params.type?.let { type(it) }
-        params.operator?.let { operator(Operator.fromString(it)) }
-        params.analyzer?.let { analyzer(it) }
-        params.boost?.let { boost(it) }
-        params.slop?.let { slop(it) }
-        params.fuzziness?.let { fuzziness(it) }
-        params.prefix_length?.let { prefixLength(it) }
-        params.max_expansions?.let { maxExpansions(it) }
-        params.minimum_should_match?.let { minimumShouldMatch(it) }
-        params.fuzzy_rewrite?.let { fuzzyRewrite(it) }
-        params.tie_breaker?.let { tieBreaker(it) }
-        params.lenient?.let { lenient(it) }
-        params.cutoff_frequency?.let { cutoffFrequency(it) }
-        params.zero_terms_query?.let { zeroTermsQuery(it) }
-    }
+fun multi_match(shouldApply: Boolean = true, init: MultiMatchData.() -> Unit): MultiMatchQueryBuilder? {
+    if (shouldApply) {
+        val params = MultiMatchData().apply(init)
+        return MultiMatchQueryBuilder(params.query, *params.fields!!.toTypedArray()).apply {
+            params.type?.let { type(it) }
+            params.operator?.let { operator(Operator.fromString(it)) }
+            params.analyzer?.let { analyzer(it) }
+            params.boost?.let { boost(it) }
+            params.slop?.let { slop(it) }
+            params.fuzziness?.let { fuzziness(it) }
+            params.prefix_length?.let { prefixLength(it) }
+            params.max_expansions?.let { maxExpansions(it) }
+            params.minimum_should_match?.let { minimumShouldMatch(it) }
+            params.fuzzy_rewrite?.let { fuzzyRewrite(it) }
+            params.tie_breaker?.let { tieBreaker(it) }
+            params.lenient?.let { lenient(it) }
+            params.cutoff_frequency?.let { cutoffFrequency(it) }
+            params.zero_terms_query?.let { zeroTermsQuery(it) }
+        }
+    } else return null
 }

@@ -23,13 +23,15 @@ class FuzzyBlock {
             FuzzyData(name = this).apply(init)
 }
 
-fun fuzzy(init: FuzzyBlock.() -> FuzzyBlock.FuzzyData): FuzzyQueryBuilder {
-    val params = FuzzyBlock().init()
-    return FuzzyQueryBuilder(params.name, params.value).apply {
-        initQuery(params)
-        params.fuzziness?.let { fuzziness(it) }
-        params.prefix_length?.let { prefixLength(it) }
-        params.max_expansions?.let { maxExpansions(it) }
-    }
+fun fuzzy(shouldApply: Boolean = true, init: FuzzyBlock.() -> FuzzyBlock.FuzzyData): FuzzyQueryBuilder? {
+    if (shouldApply) {
+        val params = FuzzyBlock().init()
+        return FuzzyQueryBuilder(params.name, params.value).apply {
+            initQuery(params)
+            params.fuzziness?.let { fuzziness(it) }
+            params.prefix_length?.let { prefixLength(it) }
+            params.max_expansions?.let { maxExpansions(it) }
+        }
+    } else return null
 }
 
