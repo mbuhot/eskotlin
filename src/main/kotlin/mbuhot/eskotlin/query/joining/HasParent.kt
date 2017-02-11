@@ -15,8 +15,8 @@ data class HasParentData(
         var boost: Float? = null,
         var inner_hits: InnerHitBuilder? = null) {
 
-    fun query(f: () -> QueryBuilder) {
-        query = f()
+    fun query(f: () -> QueryBuilder?) {
+        f()?.let { query = it }
     }
 }
 

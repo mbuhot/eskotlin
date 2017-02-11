@@ -4,9 +4,9 @@
 
 package mbuhot.eskotlin.query.fulltext
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
-import org.elasticsearch.index.query.MatchQueryBuilder
-import org.elasticsearch.index.query.MultiMatchQueryBuilder
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 
@@ -34,6 +34,18 @@ class MultiMatchTest {
                 }
             }
             """
+    }
+
+    @Test
+    fun `test multi_match disabled`() {
+        val query = runIf(false) {
+            multi_match {
+                query = "this is a test"
+                fields = listOf("subject", "message")
+            }
+        }
+        
+        query.should_be_null()
     }
 
     @Test

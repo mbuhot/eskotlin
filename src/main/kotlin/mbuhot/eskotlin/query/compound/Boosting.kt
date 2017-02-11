@@ -12,12 +12,12 @@ data class BoostingData(
     var negative: QueryBuilder? = null,
     var negative_boost: Float? = null) {
 
-    fun positive(f: () -> QueryBuilder) {
-        positive = f()
+    fun positive(f: () -> QueryBuilder?) {
+        f()?.let { positive = it }
     }
 
-    fun negative(f: () -> QueryBuilder) {
-        negative = f()
+    fun negative(f: () -> QueryBuilder?) {
+        f()?.let { negative = it }
     }
 }
 

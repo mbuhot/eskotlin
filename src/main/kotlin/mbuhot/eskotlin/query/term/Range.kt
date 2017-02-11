@@ -53,15 +53,15 @@ class RangeBlock {
 }
 
 fun range(init: RangeBlock.() -> RangeBlock.RangeData): RangeQueryBuilder {
-    val params = RangeBlock().init()
-    return RangeQueryBuilder(params.name).apply {
-        initQuery(params)
-        params.from?.let { from(it) }
-        params.to?.let { to(it) }
-        params.include_lower?.let { includeLower(it) }
-        params.include_upper?.let { includeUpper(it) }
-        params.boost?.let { boost(it) }
-        params.format?.let { format(it) }
-        params.time_zone?.let { timeZone(it) }
-    }
+        val params = RangeBlock().init()
+        return RangeQueryBuilder(params.name).apply {
+            initQuery(params)
+            params.from?.let { from(it) }
+            params.to?.let { to(it) }
+            params.include_lower?.let { includeLower(it) }
+            params.include_upper?.let { includeUpper(it) }
+            params.boost?.let { boost(it) }
+            params.format?.let { format(it) }
+            params.time_zone?.let { timeZone(it) }
+        }
 }

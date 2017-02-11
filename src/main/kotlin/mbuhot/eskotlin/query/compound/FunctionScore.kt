@@ -12,7 +12,7 @@ import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder
 
 data class FunctionScoreData(
-        var query: QueryBuilder = MatchAllQueryBuilder(),
+        var query: QueryBuilder? = MatchAllQueryBuilder(),
         var boost: Float? = null,
         var functions: List<Pair<QueryBuilder?, ScoreFunctionBuilder<*>>> = emptyList(),
         var max_boost: Float? = null,
@@ -22,7 +22,10 @@ data class FunctionScoreData(
 
 fun function_score(init: FunctionScoreData.() -> Unit): FunctionScoreQueryBuilder {
     val params = FunctionScoreData().apply(init)
-    val filterFunctions = params.functions.map { if (it.first == null) FunctionScoreQueryBuilder.FilterFunctionBuilder(it.second) else FunctionScoreQueryBuilder.FilterFunctionBuilder(it.first, it.second) }
+    val filterFunctions = params.functions.map {
+        if (it.first == null) FunctionScoreQueryBuilder.FilterFunctionBuilder(it.second)
+        else FunctionScoreQueryBuilder.FilterFunctionBuilder(it.first, it.second)
+    }
     val builder = FunctionScoreQueryBuilder(params.query, filterFunctions.toTypedArray())
 
     return builder.apply {

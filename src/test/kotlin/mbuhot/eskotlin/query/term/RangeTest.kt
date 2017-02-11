@@ -4,7 +4,9 @@
 
 package mbuhot.eskotlin.query.term
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -36,6 +38,20 @@ class RangeTest {
             }
         }
         """
+    }
+
+    @Test
+    fun `test range disabled`() {
+        val query = runIf(false) {
+            range {
+                "age" to {
+                    gte = 10
+                    lte = 20
+                    boost = 2.0f
+                }
+            }
+        }
+        query.should_be_null()
     }
 
     @Test

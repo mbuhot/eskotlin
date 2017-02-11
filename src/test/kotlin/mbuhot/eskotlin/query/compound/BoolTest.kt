@@ -4,10 +4,12 @@
 
 package mbuhot.eskotlin.query.compound
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.match_all
 import mbuhot.eskotlin.query.term.range
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -35,6 +37,88 @@ class BoolTest {
                 "disable_coord":false,
                 "adjust_pure_negative":true,
                 "boost":1.0
+            }
+        }
+        """
+    }
+
+    @Test
+    fun `test bool disabled`() {
+        val query = runIf(false) {
+            bool {
+                should {
+                    match_all { }
+                }
+            }
+        }
+
+        query.should_be_null()
+    }
+
+    @Test
+    fun `test bool disabled parameters`() {
+        val query = bool {
+            must {
+                term { "user" to "kimchy" }
+            }
+            runIf(true) {
+                filter {
+                    term { "tag" to "true" }
+                }
+            }
+            runIf(false) {
+                filter {
+                    term { "tag" to "false" }
+                }
+            }
+            runIf(false) {
+                must_not {
+                    range {
+                        "age" to {
+                            from = 10
+                            to = 20
+                        }
+                    }
+                }
+            }
+            should = listOf(
+                    term { "tag" to "wow" },
+                    runIf(false) { term { "tag" to "elasticsearch" } })
+            minimum_should_match = 1
+            boost = 1.0f
+        }
+
+        query should_render_as """
+        {
+            "bool": {
+                "must": [{
+                    "term": {
+                        "user": {
+                            "value": "kimchy",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "filter": [{
+                    "term": {
+                        "tag": {
+                            "value": "true",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "should": [{
+                    "term": {
+                        "tag": {
+                            "value": "wow",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "disable_coord": false,
+                "adjust_pure_negative": true,
+                "minimum_should_match": "1",
+                "boost": 1.0
             }
         }
         """

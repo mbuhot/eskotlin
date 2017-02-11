@@ -9,10 +9,10 @@ import org.elasticsearch.index.query.QueryBuilder
 
 
 data class ConstantScoreData(
-    var filter: QueryBuilder? = null,
-    var boost: Float? = null) {
-    fun filter(f: () -> QueryBuilder) {
-        filter = f()
+        var filter: QueryBuilder? = null,
+        var boost: Float? = null) {
+    fun filter(f: () -> QueryBuilder?) {
+        f()?.let { filter = it }
     }
 }
 

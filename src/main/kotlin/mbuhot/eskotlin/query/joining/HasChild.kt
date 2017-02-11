@@ -18,8 +18,8 @@ data class HasChildData(
         var max_children: Int = HasChildQueryBuilder.DEFAULT_MAX_CHILDREN,
         var inner_hits: InnerHitBuilder? = null) {
 
-    fun query(f: () -> QueryBuilder) {
-        query = f()
+    fun query(f: () -> QueryBuilder?) {
+        f()?.let { query = it }
     }
 }
 

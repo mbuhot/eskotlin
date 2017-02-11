@@ -4,7 +4,9 @@
 
 package mbuhot.eskotlin.query.term
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -27,5 +29,16 @@ class ExistsTest {
             }
         }
         """
+    }
+
+    @Test
+    fun `test exists disabled`() {
+        val query = runIf(false) {
+            exists {
+                field = "user"
+            }
+        }
+
+        query.should_be_null()
     }
 }

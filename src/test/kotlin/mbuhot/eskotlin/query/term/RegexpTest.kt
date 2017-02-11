@@ -4,7 +4,9 @@
 
 package mbuhot.eskotlin.query.term
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.elasticsearch.index.query.RegexpFlag.*
 import org.junit.Test
 
@@ -33,6 +35,17 @@ class RegexpTest {
             }
         }
         """
+    }
+
+    @Test
+    fun `test regexp disabled`() {
+        val query = runIf(false) {
+            regexp {
+                "name.first" to "s.*y"
+            }
+        }
+
+        query.should_be_null()
     }
 
     @Test

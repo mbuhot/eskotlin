@@ -4,9 +4,11 @@
 
 package mbuhot.eskotlin.query.fulltext
 
+import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.boost
 import mbuhot.eskotlin.query.term.match_all
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -23,6 +25,16 @@ class MatchTest {
             boost = 1.2f
         }
         query should_render_as """{ "match_all": { "boost" : 1.2 }}"""
+    }
+
+    @Test
+    fun `test match_all disabled`() {
+        val query = runIf(false) {
+            match_all {
+                boost = 1.2f
+            }
+        }
+        query.should_be_null()
     }
 
     @Test
@@ -47,8 +59,15 @@ class MatchTest {
     }
 
     @Test
-    fun `test match with query and operator`() {
+    fun `test match disabled`() {
+        val query = runIf(false) {
+            match { "message" to "this is a test" }
+        }
+        query.should_be_null()
+    }
 
+    @Test
+    fun `test match with query and operator`() {
 
         val query = match {
             "message" to {
