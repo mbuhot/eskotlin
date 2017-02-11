@@ -4,6 +4,7 @@
 
 package mbuhot.eskotlin.query.term
 
+import mbuhot.eskotlin.query.util.runIf
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import org.junit.Test
@@ -33,8 +34,10 @@ class IdsTest {
 
     @Test
     fun `test ids disabled`() {
-        val query = ids(false) {
-            values = listOf("1", "100", "4")
+        val query = runIf(false) {
+            ids {
+                values = listOf("1", "100", "4")
+            }
         }
 
         query.should_be_null()

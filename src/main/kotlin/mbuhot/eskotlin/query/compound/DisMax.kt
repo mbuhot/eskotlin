@@ -12,13 +12,11 @@ data class DisMaxData(
         var boost: Float? = null,
         var queries: List<QueryBuilder?>? = null)
 
-fun dis_max(shouldApply: Boolean = true, init: DisMaxData.() -> Unit): DisMaxQueryBuilder? {
-    if (shouldApply) {
-        val params = DisMaxData().apply(init)
-        return DisMaxQueryBuilder().apply {
-            params.tie_breaker?.let { tieBreaker(it) }
-            params.boost?.let { boost(it) }
-            params.queries?.filterNotNull()?.forEach { add(it) }
-        }
-    } else return null
+fun dis_max(init: DisMaxData.() -> Unit): DisMaxQueryBuilder {
+    val params = DisMaxData().apply(init)
+    return DisMaxQueryBuilder().apply {
+        params.tie_breaker?.let { tieBreaker(it) }
+        params.boost?.let { boost(it) }
+        params.queries?.filterNotNull()?.forEach { add(it) }
+    }
 }

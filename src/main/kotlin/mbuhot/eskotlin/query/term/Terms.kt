@@ -18,11 +18,9 @@ class TermsBlock {
     }
 }
 
-fun terms(shouldApply: Boolean = true, init: TermsBlock.() -> TermsBlock.TermsData): TermsQueryBuilder? {
-    if (shouldApply) {
-        val params = TermsBlock().init()
-        return TermsQueryBuilder(params.name, *params.values.toTypedArray()).apply {
-            initQuery(params)
-        }
-    } else return null
+fun terms(init: TermsBlock.() -> TermsBlock.TermsData): TermsQueryBuilder {
+    val params = TermsBlock().init()
+    return TermsQueryBuilder(params.name, *params.values.toTypedArray()).apply {
+        initQuery(params)
+    }
 }

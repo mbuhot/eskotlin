@@ -22,12 +22,10 @@ class MatchPhraseBlock {
             var slop: Int? = null)
 }
 
-fun match_phrase(shouldApply: Boolean = true, init: MatchPhraseBlock.() -> MatchPhraseBlock.MatchPhraseData): MatchPhraseQueryBuilder? {
-    if (shouldApply) {
-        val params = MatchPhraseBlock().init()
-        return MatchPhraseQueryBuilder(params.name, params.query).apply {
-            params.analyzer?.let { analyzer(it) }
-            params.slop?.let { slop(it) }
-        }
-    } else return null
+fun match_phrase(init: MatchPhraseBlock.() -> MatchPhraseBlock.MatchPhraseData): MatchPhraseQueryBuilder {
+    val params = MatchPhraseBlock().init()
+    return MatchPhraseQueryBuilder(params.name, params.query).apply {
+        params.analyzer?.let { analyzer(it) }
+        params.slop?.let { slop(it) }
+    }
 }

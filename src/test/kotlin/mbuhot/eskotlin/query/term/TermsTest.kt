@@ -6,6 +6,7 @@ package mbuhot.eskotlin.query.term
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -33,8 +34,10 @@ class TermsTest {
 
     @Test
     fun `test terms disabled`() {
-        val query = terms(false) {
-            "user" to listOf("kimchy", "elasticsearch")
+        val query = runIf(false) {
+            terms {
+                "user" to listOf("kimchy", "elasticsearch")
+            }
         }
 
         query.should_be_null()

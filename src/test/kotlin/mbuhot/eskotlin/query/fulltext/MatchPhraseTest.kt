@@ -6,6 +6,7 @@ package mbuhot.eskotlin.query.fulltext
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -38,8 +39,10 @@ class MatchPhraseTest {
 
     @Test
     fun `test match_phrase disabled`() {
-        val query = match_phrase(false) {
-            "message" to "this is a test"
+        val query = runIf(false) {
+            match_phrase {
+                "message" to "this is a test"
+            }
         }
 
         query.should_be_null()

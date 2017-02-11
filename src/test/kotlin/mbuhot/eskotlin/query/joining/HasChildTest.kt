@@ -7,6 +7,7 @@ package mbuhot.eskotlin.query.joining
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.apache.lucene.search.join.ScoreMode
 import org.elasticsearch.index.query.InnerHitBuilder
 import org.junit.Test
@@ -64,17 +65,19 @@ class HasChildTest {
 
     @Test
     fun `test has_child disabled`() {
-        val query = has_child(false) {
-            type = "blog_tag"
-            score_mode = ScoreMode.Total
-            min_children = 2
-            max_children = 10
-            query {
-                term {
-                    "tag" to "something"
+        val query = runIf(false) {
+            has_child {
+                type = "blog_tag"
+                score_mode = ScoreMode.Total
+                min_children = 2
+                max_children = 10
+                query {
+                    term {
+                        "tag" to "something"
+                    }
                 }
+                inner_hits = InnerHitBuilder()
             }
-            inner_hits = InnerHitBuilder()
         }
         query.should_be_null()
     }
@@ -86,14 +89,18 @@ class HasChildTest {
             score_mode = ScoreMode.Total
             min_children = 2
             max_children = 10
-            query(true) {
-                term {
-                    "tag" to "something"
+            runIf(true) {
+                query {
+                    term {
+                        "tag" to "something"
+                    }
                 }
             }
-            query(false) {
-                term {
-                    "tag" to "something_else"
+            runIf(false) {
+                query {
+                    term {
+                        "tag" to "something_else"
+                    }
                 }
             }
             inner_hits = InnerHitBuilder()

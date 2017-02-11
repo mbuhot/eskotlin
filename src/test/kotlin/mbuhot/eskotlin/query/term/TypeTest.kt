@@ -6,6 +6,7 @@ package mbuhot.eskotlin.query.term
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -31,8 +32,10 @@ class TypeTest {
 
     @Test
     fun `test type disabled`() {
-        val query = type(false) {
-            value = "my_type"
+        val query = runIf(false) {
+            type {
+                value = "my_type"
+            }
         }
         query.should_be_null()
     }

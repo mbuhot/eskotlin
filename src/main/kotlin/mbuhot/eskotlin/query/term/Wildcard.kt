@@ -19,12 +19,10 @@ class WildcardBlock {
             WildcardData(name = this).apply(init)
 }
 
-fun wildcard(shouldApply: Boolean = true, init: WildcardBlock.() -> WildcardBlock.WildcardData): WildcardQueryBuilder? {
-    if (shouldApply) {
-        val params = WildcardBlock().init()
-        return WildcardQueryBuilder(params.name, params.wildcard).apply {
-            initQuery(params)
-        }
-    } else return null
+fun wildcard(init: WildcardBlock.() -> WildcardBlock.WildcardData): WildcardQueryBuilder {
+    val params = WildcardBlock().init()
+    return WildcardQueryBuilder(params.name, params.wildcard).apply {
+        initQuery(params)
+    }
 }
 

@@ -7,6 +7,7 @@ package mbuhot.eskotlin.query.compound
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -60,18 +61,20 @@ class BoostingTest {
 
     @Test
     fun `test boosting disabled`() {
-        val query = boosting(false) {
-            positive {
-                term {
-                    "field1" to "value1"
+        val query = runIf(false) {
+            boosting {
+                positive {
+                    term {
+                        "field1" to "value1"
+                    }
                 }
-            }
-            negative {
-                term {
-                    "field2" to "value2"
+                negative {
+                    term {
+                        "field2" to "value2"
+                    }
                 }
+                negative_boost = 0.2f
             }
-            negative_boost = 0.2f
         }
         query.should_be_null()
     }
@@ -84,14 +87,18 @@ class BoostingTest {
                     "field1" to "value1"
                 }
             }
-            negative(false) {
-                term {
-                    "field2" to "value2"
+            runIf(false) {
+                negative {
+                    term {
+                        "field2" to "value2"
+                    }
                 }
             }
-            negative(true) {
-                term {
-                    "field3" to "value3"
+            runIf(true) {
+                negative {
+                    term {
+                        "field3" to "value3"
+                    }
                 }
             }
             negative_boost = 0.2f

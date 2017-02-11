@@ -35,22 +35,20 @@ class MatchBlock {
             var cutoff_frequency: Float? = null)
 }
 
-fun match(shouldApply: Boolean = true, init: MatchBlock.() -> MatchBlock.MatchData): MatchQueryBuilder? {
-    if (shouldApply) {
-        val params = MatchBlock().init()
-        return MatchQueryBuilder(params.name, params.query).apply {
-            params.analyzer?.let { analyzer(it) }
-            params.boost?.let { boost(it) }
-            params.cutoff_frequency?.let { cutoffFrequency(it) }
-            params.fuzziness?.let { fuzziness(it) }
-            params.fuzzy_rewrite?.let { fuzzyRewrite(it) }
-            params.fuzzy_transpositions?.let { fuzzyTranspositions(it) }
-            params.lenient?.let { lenient(it) }
-            params.max_expansions?.let { maxExpansions(it) }
-            params.minimum_should_match?.let { minimumShouldMatch(it) }
-            params.operator?.let { operator(Operator.fromString(it)) }
-            params.prefix_length?.let { prefixLength(it) }
-            params.zero_terms_query?.let { zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(it.toUpperCase())) }
-        }
-    } else return null
+fun match(init: MatchBlock.() -> MatchBlock.MatchData): MatchQueryBuilder {
+    val params = MatchBlock().init()
+    return MatchQueryBuilder(params.name, params.query).apply {
+        params.analyzer?.let { analyzer(it) }
+        params.boost?.let { boost(it) }
+        params.cutoff_frequency?.let { cutoffFrequency(it) }
+        params.fuzziness?.let { fuzziness(it) }
+        params.fuzzy_rewrite?.let { fuzzyRewrite(it) }
+        params.fuzzy_transpositions?.let { fuzzyTranspositions(it) }
+        params.lenient?.let { lenient(it) }
+        params.max_expansions?.let { maxExpansions(it) }
+        params.minimum_should_match?.let { minimumShouldMatch(it) }
+        params.operator?.let { operator(Operator.fromString(it)) }
+        params.prefix_length?.let { prefixLength(it) }
+        params.zero_terms_query?.let { zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(it.toUpperCase())) }
+    }
 }

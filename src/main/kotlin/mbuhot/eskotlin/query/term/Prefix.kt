@@ -19,11 +19,9 @@ class PrefixBlock {
             PrefixData(name = this).apply(init)
 }
 
-fun prefix(shouldApply: Boolean = true, init: PrefixBlock.() -> PrefixBlock.PrefixData): PrefixQueryBuilder? {
-    if (shouldApply) {
-        val params = PrefixBlock().init()
-        return PrefixQueryBuilder(params.name, params.prefix).apply {
-            initQuery(params)
-        }
-    } else return null
+fun prefix(init: PrefixBlock.() -> PrefixBlock.PrefixData): PrefixQueryBuilder {
+    val params = PrefixBlock().init()
+    return PrefixQueryBuilder(params.name, params.prefix).apply {
+        initQuery(params)
+    }
 }

@@ -7,6 +7,7 @@ package mbuhot.eskotlin.query.compound
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -45,13 +46,15 @@ class ConstantScoreTest {
 
     @Test
     fun `test constant_score disabled`() {
-        val query = constant_score(false) {
-            filter {
-                term {
-                    "user" to "kimchy"
+        val query = runIf(false) {
+            constant_score {
+                filter {
+                    term {
+                        "user" to "kimchy"
+                    }
                 }
+                boost = 1.2f
             }
-            boost = 1.2f
         }
 
         query.should_be_null()
@@ -60,14 +63,18 @@ class ConstantScoreTest {
     @Test
     fun `test constant_score disabled parameters`() {
         val query = constant_score {
-            filter(true) {
-                term {
-                    "user" to "kimchy"
+            runIf(true) {
+                filter {
+                    term {
+                        "user" to "kimchy"
+                    }
                 }
             }
-            filter(false) {
-                term {
-                    "user" to "bob"
+            runIf(false) {
+                filter {
+                    term {
+                        "user" to "bob"
+                    }
                 }
             }
             boost = 1.2f

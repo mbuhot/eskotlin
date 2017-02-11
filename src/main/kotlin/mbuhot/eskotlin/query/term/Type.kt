@@ -11,11 +11,9 @@ import org.elasticsearch.index.query.TypeQueryBuilder
 class TypeData(
         var value: String? = null) : QueryData()
 
-fun type(shouldApply: Boolean = true, init: TypeData.() -> Unit): TypeQueryBuilder? {
-    if (shouldApply) {
-        val params = TypeData().apply(init)
-        return TypeQueryBuilder(params.value).apply {
-            initQuery(params)
-        }
-    } else return null
+fun type(init: TypeData.() -> Unit): TypeQueryBuilder {
+    val params = TypeData().apply(init)
+    return TypeQueryBuilder(params.value).apply {
+        initQuery(params)
+    }
 }

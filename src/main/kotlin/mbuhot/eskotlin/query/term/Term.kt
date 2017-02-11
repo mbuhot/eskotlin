@@ -22,11 +22,9 @@ class TermBlock {
     }
 }
 
-fun term(shouldApply: Boolean = true, init: TermBlock.() -> TermBlock.TermData): TermQueryBuilder? {
-    if (shouldApply) {
-        val params = TermBlock().init()
-        return TermQueryBuilder(params.name, params.value).apply {
-            initQuery(params)
-        }
-    } else return null
+fun term(init: TermBlock.() -> TermBlock.TermData): TermQueryBuilder {
+    val params = TermBlock().init()
+    return TermQueryBuilder(params.name, params.value).apply {
+        initQuery(params)
+    }
 }

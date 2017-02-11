@@ -6,6 +6,7 @@ package mbuhot.eskotlin.query.term
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -33,8 +34,10 @@ class WildcardTest {
 
     @Test
     fun `test wildcard disabled`() {
-        val query = wildcard(false) {
-            "user" to "ki*y"
+        val query = runIf(false) {
+            wildcard {
+                "user" to "ki*y"
+            }
         }
 
         query.should_be_null()

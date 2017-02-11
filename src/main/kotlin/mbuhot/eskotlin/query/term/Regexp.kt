@@ -22,14 +22,12 @@ class RegexpBlock {
             RegexpData(name = this).apply(init)
 }
 
-fun regexp(shouldApply: Boolean = true, init: RegexpBlock.() -> RegexpBlock.RegexpData): RegexpQueryBuilder? {
-    if (shouldApply) {
-        val params = RegexpBlock().init()
-        return RegexpQueryBuilder(params.name, params.value).apply {
-            initQuery(params)
-            params.flags?.let { flags(*it.toTypedArray()) }
-            params.max_determinized_states?.let { maxDeterminizedStates(it) }
-        }
-    } else return null
+fun regexp(init: RegexpBlock.() -> RegexpBlock.RegexpData): RegexpQueryBuilder {
+    val params = RegexpBlock().init()
+    return RegexpQueryBuilder(params.name, params.value).apply {
+        initQuery(params)
+        params.flags?.let { flags(*it.toTypedArray()) }
+        params.max_determinized_states?.let { maxDeterminizedStates(it) }
+    }
 }
 

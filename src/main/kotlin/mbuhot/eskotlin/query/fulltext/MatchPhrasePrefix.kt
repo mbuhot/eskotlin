@@ -23,13 +23,11 @@ class MatchPhrasePrefixBlock {
             var max_expansions: Int? = null)
 }
 
-fun match_phrase_prefix(shouldApply: Boolean = true, init: MatchPhrasePrefixBlock.() -> MatchPhrasePrefixBlock.MatchPhrasePrefixData): MatchPhrasePrefixQueryBuilder? {
-    if (shouldApply) {
-        val params = MatchPhrasePrefixBlock().init()
-        return MatchPhrasePrefixQueryBuilder(params.name, params.query).apply {
-            params.analyzer?.let { analyzer(it) }
-            params.slop?.let { slop(it) }
-            params.max_expansions?.let { maxExpansions(it) }
-        }
-    } else return null
+fun match_phrase_prefix(init: MatchPhrasePrefixBlock.() -> MatchPhrasePrefixBlock.MatchPhrasePrefixData): MatchPhrasePrefixQueryBuilder {
+    val params = MatchPhrasePrefixBlock().init()
+    return MatchPhrasePrefixQueryBuilder(params.name, params.query).apply {
+        params.analyzer?.let { analyzer(it) }
+        params.slop?.let { slop(it) }
+        params.max_expansions?.let { maxExpansions(it) }
+    }
 }

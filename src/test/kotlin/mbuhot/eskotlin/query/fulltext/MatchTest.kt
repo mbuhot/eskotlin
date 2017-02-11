@@ -8,6 +8,7 @@ import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.boost
 import mbuhot.eskotlin.query.term.match_all
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -28,8 +29,10 @@ class MatchTest {
 
     @Test
     fun `test match_all disabled`() {
-        val query = match_all(false) {
-            boost = 1.2f
+        val query = runIf(false) {
+            match_all {
+                boost = 1.2f
+            }
         }
         query.should_be_null()
     }
@@ -57,7 +60,9 @@ class MatchTest {
 
     @Test
     fun `test match disabled`() {
-        val query = match(false) { "message" to "this is a test" }
+        val query = runIf(false) {
+            match { "message" to "this is a test" }
+        }
         query.should_be_null()
     }
 

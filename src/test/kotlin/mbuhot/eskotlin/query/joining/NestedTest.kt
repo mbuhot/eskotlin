@@ -9,6 +9,7 @@ import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.range
+import mbuhot.eskotlin.query.util.runIf
 import org.apache.lucene.search.join.ScoreMode
 import org.junit.Test
 
@@ -82,15 +83,17 @@ class NestedTest {
 
     @Test
     fun `test nested disabled`() {
-        val query = nested(false) {
-            path = "obj1"
-            score_mode = ScoreMode.Avg
-            query {
-                bool {
-                    must = listOf(
-                            match { "obj1.name" to "blue" },
-                            range { "obj1.count" to { gt = 5 } }
-                    )
+        val query = runIf(false) {
+            nested {
+                path = "obj1"
+                score_mode = ScoreMode.Avg
+                query {
+                    bool {
+                        must = listOf(
+                                match { "obj1.name" to "blue" },
+                                range { "obj1.count" to { gt = 5 } }
+                        )
+                    }
                 }
             }
         }
@@ -103,20 +106,24 @@ class NestedTest {
         val query = nested {
             path = "obj1"
             score_mode = ScoreMode.Avg
-            query(true) {
-                bool {
-                    must = listOf(
-                            match { "obj1.name" to "blue" },
-                            range { "obj1.count" to { gt = 5 } }
-                    )
+            runIf(true) {
+                query {
+                    bool {
+                        must = listOf(
+                                match { "obj1.name" to "blue" },
+                                range { "obj1.count" to { gt = 5 } }
+                        )
+                    }
                 }
             }
-            query(false) {
-                bool {
-                    must = listOf(
-                            match { "obj1.name" to "green" },
-                            range { "obj1.count" to { gt = 6 } }
-                    )
+            runIf(false) {
+                query {
+                    bool {
+                        must = listOf(
+                                match { "obj1.name" to "green" },
+                                range { "obj1.count" to { gt = 6 } }
+                        )
+                    }
                 }
             }
         }

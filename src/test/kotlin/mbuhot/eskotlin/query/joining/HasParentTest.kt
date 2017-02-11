@@ -7,6 +7,7 @@ package mbuhot.eskotlin.query.joining
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.elasticsearch.index.query.InnerHitBuilder
 import org.junit.Test
 
@@ -60,14 +61,16 @@ class HasParentTest {
 
     @Test
     fun `test has_parent disabled`() {
-        val query = has_parent(false) {
-            parent_type = "blog"
-            query {
-                term {
-                    "tag" to "something"
+        val query = runIf(false) {
+            has_parent {
+                parent_type = "blog"
+                query {
+                    term {
+                        "tag" to "something"
+                    }
                 }
+                inner_hits = InnerHitBuilder()
             }
-            inner_hits = InnerHitBuilder()
         }
 
         query.should_be_null()
@@ -78,14 +81,18 @@ class HasParentTest {
 
         val query = has_parent {
             parent_type = "blog"
-            query(true) {
-                term {
-                    "tag" to "something"
+            runIf(true) {
+                query {
+                    term {
+                        "tag" to "something"
+                    }
                 }
             }
-            query(false) {
-                term {
-                    "tag" to "something_else"
+            runIf(false) {
+                query {
+                    term {
+                        "tag" to "something_else"
+                    }
                 }
             }
             inner_hits = InnerHitBuilder()

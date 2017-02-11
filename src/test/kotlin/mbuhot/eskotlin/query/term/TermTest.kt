@@ -6,6 +6,7 @@ package mbuhot.eskotlin.query.term
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 class TermTest {
@@ -30,8 +31,10 @@ class TermTest {
 
     @Test
     fun `test term disabled`() {
-        val query = term(false) {
-            "user" to "Kimchy"
+        val query = runIf(false) {
+            term {
+                "user" to "Kimchy"
+            }
         }
 
         query.should_be_null()

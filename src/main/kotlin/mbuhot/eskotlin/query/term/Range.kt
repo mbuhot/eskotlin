@@ -52,8 +52,7 @@ class RangeBlock {
     }
 }
 
-fun range(shouldApply: Boolean = true, init: RangeBlock.() -> RangeBlock.RangeData): RangeQueryBuilder? {
-    if (shouldApply) {
+fun range(init: RangeBlock.() -> RangeBlock.RangeData): RangeQueryBuilder {
         val params = RangeBlock().init()
         return RangeQueryBuilder(params.name).apply {
             initQuery(params)
@@ -65,5 +64,4 @@ fun range(shouldApply: Boolean = true, init: RangeBlock.() -> RangeBlock.RangeDa
             params.format?.let { format(it) }
             params.time_zone?.let { timeZone(it) }
         }
-    } else return null
 }

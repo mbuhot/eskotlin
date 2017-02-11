@@ -7,6 +7,7 @@ package mbuhot.eskotlin.query.compound
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -91,13 +92,15 @@ class IndicesTest {
     @Test
     fun `test indices disabled`() {
 
-        val query = indices(false) {
-            indices = listOf("index1", "index2")
-            query {
-                term { "tag" to "wow" }
-            }
-            no_match_query {
-                term { "tag" to "kow" }
+        val query = runIf(false) {
+            indices {
+                indices = listOf("index1", "index2")
+                query {
+                    term { "tag" to "wow" }
+                }
+                no_match_query {
+                    term { "tag" to "kow" }
+                }
             }
         }
 
@@ -108,17 +111,25 @@ class IndicesTest {
     fun `test indices disabled parameters`() {
         val query = indices {
             indices = listOf("index1", "index2")
-            query(true) {
-                term { "tag" to "wow" }
+            runIf(true) {
+                query {
+                    term { "tag" to "wow" }
+                }
             }
-            query(false) {
-                term { "tag" to "ok" }
+            runIf(false) {
+                query {
+                    term { "tag" to "ok" }
+                }
             }
-            no_match_query(true) {
-                term { "tag" to "ok" }
+            runIf(true) {
+                no_match_query {
+                    term { "tag" to "ok" }
+                }
             }
-            no_match_query(false) {
-                term { "tag" to "blah" }
+            runIf(false) {
+                no_match_query {
+                    term { "tag" to "blah" }
+                }
             }
         }
 

@@ -6,7 +6,7 @@ package mbuhot.eskotlin.query.fulltext
 
 import mbuhot.eskotlin.query.should_be_null
 import mbuhot.eskotlin.query.should_render_as
-import org.elasticsearch.index.query.CommonTermsQueryBuilder
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 
@@ -38,10 +38,12 @@ class CommonTest {
 
     @Test
     fun `test common terms query disabled`() {
-        val query = common(false) {
-            "body" to {
-                query = "this is bonsai cool"
-                cutoff_frequency = 0.001f
+        val query = runIf(false) {
+            common {
+                "body" to {
+                    query = "this is bonsai cool"
+                    cutoff_frequency = 0.001f
+                }
             }
         }
 
@@ -141,13 +143,17 @@ class CommonTest {
             "body" to {
                 query = "nelly the elephant not as a cartoon"
                 cutoff_frequency = 0.001f
-                minimum_should_match(true) {
-                    low_freq = 2
-                    high_freq = 3
+                runIf(true) {
+                    minimum_should_match {
+                        low_freq = 2
+                        high_freq = 3
+                    }
                 }
-                minimum_should_match(false) {
-                    low_freq = 4
-                    high_freq = 5
+                runIf(false) {
+                    minimum_should_match {
+                        low_freq = 4
+                        high_freq = 5
+                    }
                 }
             }
         }

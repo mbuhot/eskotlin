@@ -9,6 +9,7 @@ import mbuhot.eskotlin.query.should_render_as
 import mbuhot.eskotlin.query.term.match_all
 import mbuhot.eskotlin.query.term.range
 import mbuhot.eskotlin.query.term.term
+import mbuhot.eskotlin.query.util.runIf
 import org.junit.Test
 
 /**
@@ -43,9 +44,11 @@ class BoolTest {
 
     @Test
     fun `test bool disabled`() {
-        val query = bool(false) {
-            should {
-                match_all { }
+        val query = runIf(false) {
+            bool {
+                should {
+                    match_all { }
+                }
             }
         }
 
@@ -58,23 +61,29 @@ class BoolTest {
             must {
                 term { "user" to "kimchy" }
             }
-            filter(true) {
-                term { "tag" to "true" }
+            runIf(true) {
+                filter {
+                    term { "tag" to "true" }
+                }
             }
-            filter(false) {
-                term { "tag" to "false" }
+            runIf(false) {
+                filter {
+                    term { "tag" to "false" }
+                }
             }
-            must_not(false) {
-                range {
-                    "age" to {
-                        from = 10
-                        to = 20
+            runIf(false) {
+                must_not {
+                    range {
+                        "age" to {
+                            from = 10
+                            to = 20
+                        }
                     }
                 }
             }
             should = listOf(
                     term { "tag" to "wow" },
-                    term(false) { "tag" to "elasticsearch" })
+                    runIf(false) { term { "tag" to "elasticsearch" } })
             minimum_should_match = 1
             boost = 1.0f
         }
