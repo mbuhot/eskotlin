@@ -107,9 +107,10 @@ val query = bool {
             }
         }
     }
-    should = listOf(
-        term { "tag" to "wow" },
-        term { "tag" to "elasticsearch" })
+    should {
+        term { "tag" to "wow" }
+        term { "tag" to "elasticsearch" }
+    }
     minimum_should_match = 1
     boost = 1.0f
 }

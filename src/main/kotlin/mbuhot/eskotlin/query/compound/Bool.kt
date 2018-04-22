@@ -4,6 +4,7 @@
 
 package mbuhot.eskotlin.query.compound
 
+import mbuhot.eskotlin.query.ListQueriesBlock
 import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
 
@@ -16,20 +17,20 @@ data class BoolData(
     var minimum_should_match: Int? = null,
     var boost: Float? = null) {
 
-    fun must(f: () -> QueryBuilder) {
-        must = listOf(f())
+    fun must(init: ListQueriesBlock.() -> Unit) {
+        must = ListQueriesBlock().apply(init).queries
     }
 
-    fun must_not(f: () -> QueryBuilder) {
-        must_not = listOf(f())
+    fun must_not(init: ListQueriesBlock.() -> Unit) {
+        must_not = ListQueriesBlock().apply(init).queries
     }
 
-    fun filter(f: () -> QueryBuilder) {
-        filter = listOf(f())
+    fun filter(init: ListQueriesBlock.() -> Unit) {
+        filter = ListQueriesBlock().apply(init).queries
     }
 
-    fun should(f: () -> QueryBuilder) {
-        should = listOf(f())
+    fun should(init: ListQueriesBlock.() -> Unit) {
+        should = ListQueriesBlock().apply(init).queries
     }
 }
 
