@@ -5,9 +5,6 @@
 package mbuhot.eskotlin.query.compound
 
 import mbuhot.eskotlin.query.should_render_as
-import mbuhot.eskotlin.query.term.match_all
-import mbuhot.eskotlin.query.term.range
-import mbuhot.eskotlin.query.term.term
 import org.junit.Test
 
 /**
@@ -58,9 +55,10 @@ class BoolTest {
                     }
                 }
             }
-            should = listOf(
-                term { "tag" to "wow" },
-                term { "tag" to "elasticsearch" })
+            should {
+                term { "tag" to "wow" }
+                term { "tag" to "elasticsearch" }
+            }
             minimum_should_match = 1
             boost = 1.0f
         }
@@ -119,4 +117,106 @@ class BoolTest {
         """
     }
 
+    @Test
+    fun `test bool multi query syntax`() {
+        val query = bool {
+            must {
+                term { "user" to "kimchy" }
+                term { "user" to "kimchy" }
+            }
+            filter {
+                term { "tag" to "tech" }
+                term { "tag" to "tech" }
+            }
+            must_not {
+                term { "tag" to "tech" }
+                range {
+                    "age" {
+                        from = 10
+                        to = 20
+                    }
+                }
+            }
+            should {
+                term { "tag" to "wow" }
+                term { "tag" to "elasticsearch" }
+            }
+            minimum_should_match = 1
+            boost = 1.0f
+        }
+
+        query should_render_as """
+        {
+            "bool": {
+                "must": [{
+                    "term": {
+                        "user": {
+                            "value": "kimchy",
+                            "boost": 1.0
+                        }
+                    }
+                }, {
+                    "term": {
+                        "user": {
+                            "value": "kimchy",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "filter": [{
+                    "term": {
+                        "tag": {
+                            "value": "tech",
+                            "boost": 1.0
+                        }
+                    }
+                }, {
+                    "term": {
+                        "tag": {
+                            "value": "tech",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "must_not": [{
+                    "term": {
+                        "tag": {
+                            "value": "tech",
+                            "boost": 1.0
+                        }
+                    }
+                }, {
+                    "range": {
+                        "age": {
+                            "from": 10,
+                            "to": 20,
+                            "include_lower": true,
+                            "include_upper": true,
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "should": [{
+                    "term": {
+                        "tag": {
+                            "value": "wow",
+                            "boost": 1.0
+                        }
+                    }
+                }, {
+                    "term": {
+                        "tag": {
+                            "value": "elasticsearch",
+                            "boost": 1.0
+                        }
+                    }
+                }],
+                "disable_coord": false,
+                "adjust_pure_negative": true,
+                "minimum_should_match": "1",
+                "boost": 1.0
+            }
+        }
+        """
+    }
 }

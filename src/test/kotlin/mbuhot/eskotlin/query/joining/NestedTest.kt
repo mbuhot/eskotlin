@@ -25,10 +25,10 @@ class NestedTest {
             score_mode = ScoreMode.Avg
             query {
                 bool {
-                    must = listOf(
-                            match { "obj1.name" to "blue" },
-                            range { "obj1.count" { gt = 5 } }
-                    )
+                    must {
+                        match { "obj1.name" to "blue" }
+                        range { "obj1.count" { gt = 5 } }
+                    }
                 }
             }
         }
