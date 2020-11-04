@@ -234,10 +234,10 @@ See the src/test directory for more examples.
 
 ## Span Queries - Contributions welcome!
 
-+ Span Term
++ [Span Term](./src/test/kotlin/mbuhot/eskotlin/span/SpanTermTest.kt)
 + Span Multi Term
 + Span First
-+ Span Near
++ [Span Near](./src/test/kotlin/mbuhot/eskotlin/span/SpanNearTest.kt)
 + Span Or
 + Span Not
 + Span Containing
