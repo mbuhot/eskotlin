@@ -3,7 +3,7 @@
  */
 
 group 'mbuhot'
-version '0.8.0'
+version '0.9.0'
 
 apply plugin: 'kotlin'
 apply plugin: 'com.jfrog.bintray'
@@ -15,7 +15,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
     }
 }
@@ -23,7 +23,7 @@ buildscript {
 dependencies {
     compile "org.elasticsearch:elasticsearch:7.5.1"
     compile "org.elasticsearch.plugin:parent-join-client:7.5.1"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.3.61"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
     testCompile "org.apache.logging.log4j:log4j-api:2.13.0"
     testCompile "org.apache.logging.log4j:log4j-core:2.13.0"
     testCompile 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
