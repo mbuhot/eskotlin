@@ -1,3 +1,7 @@
+# 0.7.1
+
+ - Add support for named queries
+ 
 # 0.7.0
 
  - Add support for filter and nested aggregations, thanks @nzcoffeem !

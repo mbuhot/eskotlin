@@ -46,5 +46,27 @@ class TermTest {
             }
             """
     }
+
+    @Test
+    fun `test term with boost, name and queryName`() {
+        val query = term {
+            "status" {
+                value = "urgent"
+                queryName = "myquery"
+                boost = 2.0f
+            }
+        }
+        query should_render_as """
+            {
+                "term" : {
+                    "status" : {
+                        "value" : "urgent",
+                        "boost" : 2.0,
+                        "_name": "myquery"
+                    }
+                }
+            }
+            """
+    }
 }
 
